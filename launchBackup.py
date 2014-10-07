@@ -4,15 +4,15 @@ import re
 import cProfile as cP
 # Set the directory of your voltage data
 # mainDir = '/Volumes/The Pit/FAC PiezoSensor/Data/'
-mainDir = '/Users/Whatsgood/Downloads/flow_35%/highO2/temp_95/flow_ramping/trial_2_June_2014'
-# mainDir = 'G:/FAC PiezoSensor/Data/'
+# mainDir = '/Users/Whatsgood/Downloads/flow_35%/highO2/temp_95/flow_ramping/trial_2_June_2014'
+mainDir = 'G:/FAC PiezoSensor/Data/flow_35%/highO2/temp_95/flow_ramping/trial_2_June_2014'
 
 for subdir, dirs, files in os.walk(mainDir):
     if subdir.endswith('rawData'):
         print 'Data from: '+subdir
         output = subdir.replace('rawData','')
         print 'Saving to: ' + output
-        dataType = 'PSD'
+        dataType = 'crossCorr'
         
         if re.search( r'highO2/temp_95/flow_ramping/trial_2_June_2014', subdir):
             channels = 5

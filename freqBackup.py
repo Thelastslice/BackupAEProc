@@ -1,12 +1,11 @@
 from math import floor
 from numpy.fft import fft, fftfreq, ifft, fftshift
-from numpy import asarray, mean, var
+from numpy import asarray, mean, var, sqrt
 from scipy.signal import periodogram as perGram
 
 class backfreqProcessor(object):
     ''' This class will be used to process equally spaced time series data'''
     def __init__(self, x, fs, y=None):
-        
         self.x = x
         self.y = y
         self.fs = float(fs)
@@ -104,6 +103,7 @@ class backfreqProcessor(object):
 #         df = blockFreq[1] - blockFreq[0]
         for i in range(n):
             xBlock = self.x[i*blockLength:(i+1)*blockLength]
+            print len(xBlock)
             xBlockVar = var(xBlock)
             R = self.getPSD(xBlock)
             
@@ -128,9 +128,13 @@ class backfreqProcessor(object):
         for i in range(n):
             xBlock = self.x[i*blockLength:(i+1)*blockLength]
             yBlock = self.y[i*blockLength:(i+1)*blockLength]            
-            
+            blockVar = var(zip(xBlock,yBlock))
+            totalVar = blockVar/(var(xBlock)+var(yBlock))
+            print totalVar
+            print blockVar
             crossSave = [self.getCrossPSD(xBlock,yBlock)]
-            crossPSD.append(crossSave)   
+            crossNorm = [i/blockVar for i in crossSave]
+            crossPSD.append(crossNorm)   
                       
         crossPSD = asarray(crossPSD)
         temp = mean(crossPSD, axis=0)
@@ -175,9 +179,11 @@ class backfreqProcessor(object):
         else:
             blockLength = len(x)
         mid = range(blockLength)
+        print mid
         tau = [mid[i]/self.fs for i in mid]
         
         tauBar = mean(tau)
+        print tauBar
         tau = [i-tauBar for i in tau]
         return tau
     

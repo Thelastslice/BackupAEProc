@@ -17,7 +17,7 @@ class backpiezoTrial(object):
         self.dataType = dataType
         self.numberOfChannels = numberOfChannels
         self.outputDir = outputDir
-        self.fs  = fs
+        self.fs  = np.float(fs)
         self.lastRun = lastRun
         self.dataFile = dataFile
         
@@ -65,12 +65,12 @@ class backpiezoTrial(object):
         #Butterworth Filter Criteria
 #         self.fs=10**6
 #         self.highcutoff = 200000
-        self.lowcutoff = 300
+        self.lowcutoff = np.float(300)
         self.order = 2
         self.fileType = '.txt'
         
         if fs==1.0*10**6:
-            self.highcutoff = 200000
+            self.highcutoff = np.float(200000)
             print self.highcutoff
              
         else:
