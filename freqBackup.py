@@ -1,7 +1,7 @@
 from math import floor
 from numpy.fft import fft, fftfreq, ifft, fftshift
 from numpy import asarray, mean, var, sqrt
-from scipy.signal import periodogram as perGram
+from scipy.signal import periodogram
 
 class backfreqProcessor(object):
     ''' This class will be used to process equally spaced time series data'''
@@ -60,12 +60,12 @@ class backfreqProcessor(object):
             else:
                 return self.freq, self.xPSD
         else:
-#             xbar = mean(x)
-#             xhat = [i-xbar for i in x]
-#             x1 = fft(xhat)
-#             df = self.fs/len(x1)
-#             tempxPSD = [abs(i*i.conjugate()/(self.fs**2/df)) for i in x1]
-            tempF, tempxPSD = perGram(x,fs=self.fs,return_onesided=False)
+            xbar = mean(x)
+            xhat = [i-xbar for i in x]
+            x1 = fft(xhat)
+            df = self.fs/len(x1)
+            tempxPSD = [abs(i*i.conjugate()/(self.fs**2/df)) for i in x1]
+#             tempF, tempxPSD = periodogram(x,fs=self.fs,return_onesided=False)
             return tempxPSD
                 
     def getCrossPSD(self, x=None, y=None):
@@ -103,10 +103,10 @@ class backfreqProcessor(object):
 #         df = blockFreq[1] - blockFreq[0]
         for i in range(n):
             xBlock = self.x[i*blockLength:(i+1)*blockLength]
-            print len(xBlock)
             xBlockVar = var(xBlock)
             R = self.getPSD(xBlock)
-            
+            print xBlockVar
+            print 'yolo'
             R = [i/xBlockVar for i in R] 
             
             PSD.append([R])
@@ -129,9 +129,8 @@ class backfreqProcessor(object):
             xBlock = self.x[i*blockLength:(i+1)*blockLength]
             yBlock = self.y[i*blockLength:(i+1)*blockLength]            
             blockVar = var(zip(xBlock,yBlock))
-            totalVar = blockVar/(var(xBlock)+var(yBlock))
-            print totalVar
             print blockVar
+            print 'swag'
             crossSave = [self.getCrossPSD(xBlock,yBlock)]
             crossNorm = [i/blockVar for i in crossSave]
             crossPSD.append(crossNorm)   
@@ -179,11 +178,9 @@ class backfreqProcessor(object):
         else:
             blockLength = len(x)
         mid = range(blockLength)
-        print mid
         tau = [mid[i]/self.fs for i in mid]
         
         tauBar = mean(tau)
-        print tauBar
         tau = [i-tauBar for i in tau]
         return tau
     
