@@ -51,7 +51,7 @@ class backpiezoTrial(object):
         self.accX = None
 
         #Making Primary Processed Data Storage Directory
-        self.plotDir = self.outputDir+'processedData/Test'+'/'
+        self.plotDir = self.outputDir+'processedData/10_08_2014'+'/'
          
         if not os.path.exists(self.plotDir):
             os.makedirs(self.plotDir)
